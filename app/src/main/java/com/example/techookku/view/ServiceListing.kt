@@ -1,11 +1,14 @@
-package com.example.techookku
+package com.example.techookku.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.techookku.R
 
-class serviceListing : AppCompatActivity() {
+class ServiceListing : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_service_listing2)
     }
 }
+
+

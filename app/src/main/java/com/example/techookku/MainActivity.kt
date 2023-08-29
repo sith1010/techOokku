@@ -4,26 +4,32 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
+import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import com.bumptech.glide.Glide
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.runtime.Composable
+import com.example.techookku.navigation.Navigation
+import com.example.techookku.ui.theme.TechOokkuTheme
 
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var loginButton: Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        val gifplaceholder = findViewById<ImageView>(R.id.gifImageView)
-        Glide.with(this)
-            .load(R.drawable.peoplepro)
-            .into(gifplaceholder)
+        setContent {
+            LoginScreenMain()
+        }
+    }
 
-        // Assuming you have an ImageView with the id "imageView" in your activity_main.xml layout
-        //imageView.setImageResource(R.drawable.pplogo.png)
-        loginButton = findViewById<Button>(R.id.button13)
-        // Assuming you have a Button with the id "loginButton" in your activity_main.xml layout
-        loginButton.setOnClickListener {
-            val secondActivityIntent = Intent(this, serviceListing::class.java)
-            startActivity(secondActivityIntent)
-       }
-    }}
+    @Composable
+    public fun LoginScreenMain() {
+        TechOokkuTheme {
+            Surface(color = MaterialTheme.colorScheme.background) {
+                Navigation()
+            }
+        }
+    }
+
+}
+
+
