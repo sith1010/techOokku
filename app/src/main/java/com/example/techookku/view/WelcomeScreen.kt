@@ -10,7 +10,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -47,7 +49,7 @@ fun WelcomeScreen(navController: NavController) = Box(
                 OvershootInterpolator(4f).getInterpolation(it)
             })
         )
-        delay(2000)
+        delay(3000)
         navController.navigate(Screen.LoginScreen.route) {
             popUpTo(Screen.WelcomeScreen.route) {
                 inclusive = true
@@ -60,11 +62,11 @@ fun WelcomeScreen(navController: NavController) = Box(
         modifier = Modifier.fillMaxSize().background(Brush.horizontalGradient(listColors))
     ){
         Image(
-            painter = painterResource(id = R.drawable.pplogo),
+            painter = painterResource(id = R.drawable.techookkulogo),
             contentDescription = "",
             alignment = Alignment.Center, modifier = Modifier
-                .fillMaxSize().padding(40.dp)
-                .scale(scale.value)
+                .padding(40.dp)
+                .scale(scale.value).width(100.dp).height(100.dp),
         )
     }
 
