@@ -5,7 +5,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.techookku.view.*
+import com.example.techookku.view.LoginScreen
+import com.example.techookku.view.ServiceListing
+import com.example.techookku.view.WelcomeScreen
 
 @Composable
 @Preview
@@ -22,14 +24,8 @@ fun Navigation() {
             LoginScreen(navController = navController)
         }
         composable(Screen.ServiceListing.route) {
-            ServiceListing()
+            ServiceListing(navController = navController)
         }
 
     }
-}
-
-@Composable
-@Preview(showBackground = true)
-fun NavPreview() {
-    ServiceListing()
 }

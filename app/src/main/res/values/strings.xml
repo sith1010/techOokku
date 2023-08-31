@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">techOokku</string>
+    <string name="app_title">PeoplePro</string>
+    <string name="service_listing_title">Services Offered</string>
 </resources>

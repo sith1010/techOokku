@@ -4,14 +4,11 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.shape.ZeroCornerSize
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -26,8 +23,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.Font
@@ -35,7 +30,6 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
@@ -56,6 +50,7 @@ fun LoginScreen(navController: NavController) {
         Font(R.font.dmsansmedium, FontWeight.Medium),
         Font(R.font.dmsansbold, FontWeight.Bold),
     )
+    val headerText = "PeoplePro"
 
     Box(
         modifier = Modifier
@@ -68,7 +63,7 @@ fun LoginScreen(navController: NavController) {
 
             Box(contentAlignment = Alignment.Center,
                 modifier = Modifier
-                    .height(100.dp)
+                    .height(150.dp)
                     .background(colorPrimary)
                     .constrainAs(logoimageref) {
                         top.linkTo(loginformref.top)
@@ -76,7 +71,7 @@ fun LoginScreen(navController: NavController) {
                         start.linkTo(parent.start)
                         end.linkTo(parent.end)
                     }) {
-                Header()
+                Header(headerText)
             }
 
             Surface(
@@ -320,7 +315,7 @@ fun LoginScreen(navController: NavController) {
 }
 
 @Composable
-fun Header() {
+fun Header(text: String) {
     Column(
         modifier = Modifier.padding(bottom = 40.dp),
         verticalArrangement = Arrangement.Center,
@@ -331,7 +326,7 @@ fun Header() {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start) {
             Text(
-                text = "PeoplePro",
+                text = text,
                 color = white,
                 fontSize = 20.sp,
                 fontWeight = FontWeight.SemiBold,
