@@ -42,47 +42,44 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.techookku.R
-import com.example.techookku.navigation.Screen
+import com.example.techookku.datamodel.GridItemModel
+import com.example.techookku.datamodel.ServiceDetailModel
 import com.example.techookku.ui.theme.colorPrimary
 import com.example.techookku.ui.theme.colorPrimaryLight
 import com.example.techookku.ui.theme.ghost_white
 import com.example.techookku.ui.theme.white
 
 
-data class GridItem(val imageResId: Int, val text: String)
-
 @Composable
-fun ServiceListing(
+fun ServiceListingScreen(
     navController: NavController
-
 ) {
     Scaffold(
         modifier = Modifier.background(colorPrimaryLight),
         topBar = {
-            GalleryTopBar(
+            TopBar(
+                stringResource(id = R.string.service_listing_title).toString(),
                 onUpClick = {
                     navController.navigateUp()
                 }
             )
         },
     ) { padding ->
-        val items = listOf(
-            GridItem(R.drawable.roservice, "RO Service"),
-            GridItem(R.drawable.petambulanceservice, "Pet Ambulance"),
-            GridItem(R.drawable.itservice, "IT Service"),
-            GridItem(R.drawable.acservice, "AC Service"),
-            GridItem(R.drawable.inverterservice, "Inverter Service"),
-            GridItem(R.drawable.plumberservice, "Plumber Service"),
-        )
-        
+        val items = getGridItems();
+
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
-            modifier = Modifier.padding(padding).background(colorPrimaryLight),
+            modifier = Modifier
+                .padding(padding)
+                .background(colorPrimaryLight),
             contentPadding = PaddingValues(all = dimensionResource(id = R.dimen.card_side_margin))
         ) {
-            items(items) { item ->
+            items(items, key = { message ->
+                // Return a stable + unique key for the item
+                message.serviceId
+            }) { item ->
                 GridItemContent(item = item) {
-                    navController.navigate(Screen.LoginScreen.route)
+                    navController.navigate("service_detail/${item.serviceId}")
                 }
             }
         }
@@ -91,7 +88,7 @@ fun ServiceListing(
 
 
 @Composable
-fun GridItemContent(item: GridItem, onItemClick: () -> Unit) {
+fun GridItemContent(item: GridItemModel, onItemClick: (GridItemModel) -> Unit) {
     Surface(
         shape = RoundedCornerShape(10.dp).copy(
         ),
@@ -99,7 +96,7 @@ fun GridItemContent(item: GridItem, onItemClick: () -> Unit) {
     ) {
         Column(
             modifier = Modifier
-                .clickable { onItemClick() }
+                .clickable { onItemClick(item) }
                 .padding(10.dp)
                 .fillMaxWidth()
 
@@ -118,7 +115,7 @@ fun GridItemContent(item: GridItem, onItemClick: () -> Unit) {
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = item.text,
+                text = item.name,
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.bodyMedium,
                 textAlign = TextAlign.Center,
@@ -130,14 +127,15 @@ fun GridItemContent(item: GridItem, onItemClick: () -> Unit) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun GalleryTopBar(
+public fun TopBar(
+    text: String,
     onUpClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     TopAppBar(
         title = {
             Text(
-                stringResource( id = R.string.service_listing_title),
+                text = text,
                 color = white,
                 fontSize = 20.sp,
                 fontWeight = FontWeight.SemiBold,
@@ -161,7 +159,38 @@ private fun GalleryTopBar(
 }
 
 @Composable
+fun getByServiceId(serviceId : String) :  ServiceDetailModel {
+    val serviceList: Map<String, ServiceDetailModel> = getServiceListAsMap();
+    return serviceList.getValue(serviceId);
+}
+
+@Composable
+fun getGridItems() : List<GridItemModel> {
+    val gridItems = ArrayList<GridItemModel>()
+    val serviceList: Map<String, ServiceDetailModel> = getServiceListAsMap();
+    serviceList.values.forEach { mapItem ->
+        gridItems.add(GridItemModel(mapItem.serviceId, mapItem.imageRes, mapItem.name))
+    }
+    println(gridItems)
+    return gridItems;
+}
+
+@Composable
+fun getServiceListAsMap() : Map<String, ServiceDetailModel> {
+    val serviceMap = mutableMapOf<String, ServiceDetailModel>();
+    serviceMap["ro_service"] = ServiceDetailModel("ro_service", "RO Service", "Rs. 500", "Description here", R.drawable.roservice)
+    serviceMap["petambulance_service"] = ServiceDetailModel("petambulance_service", "Pet Ambulance", "Rs. 500", "Description here", R.drawable.petambulanceservice)
+    serviceMap["it_service"] = ServiceDetailModel("it_service", "IT Service", "Rs. 500", "Description here", R.drawable.itservice)
+    serviceMap["ac_service"] = ServiceDetailModel("ac_service", "AC Service", "Rs. 500", "Description here", R.drawable.acservice)
+    serviceMap["inservice"] = ServiceDetailModel("inservice", "Inverter Service", "Rs. 500", "Description here", R.drawable.inverterservice)
+    serviceMap["plumberservice"] = ServiceDetailModel("plumberservice", "Plumber Service", "Rs. 500", "Description here", R.drawable.plumberservice)
+    return serviceMap;
+}
+
+@Composable
 @Preview(showBackground = true)
 fun ServicePreview() {
-    ServiceListing(navController = rememberNavController())
+    ServiceListingScreen(navController = rememberNavController())
 }
+
+

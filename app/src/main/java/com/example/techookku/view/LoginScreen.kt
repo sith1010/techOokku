@@ -264,7 +264,7 @@ fun LoginScreen(navController: NavController) {
                     Button(
                         onClick = {
                             navController.popBackStack()
-                            navController.navigate(Screen.ServiceListing.route)
+                            navController.navigate(Screen.ServiceListingScreen.route)
                         },
                         colors = ButtonDefaults.buttonColors(containerColor = colorPrimaryLight),
                         modifier = Modifier
