@@ -63,7 +63,7 @@ fun LoginScreen(navController: NavController) {
 
             Box(contentAlignment = Alignment.Center,
                 modifier = Modifier
-                    .height(150.dp)
+                    .height(120.dp)
                     .background(colorPrimary)
                     .constrainAs(logoimageref) {
                         top.linkTo(loginformref.top)
