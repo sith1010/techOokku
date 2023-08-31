@@ -74,6 +74,7 @@ fun ServiceListing(
             GridItem(R.drawable.inverterservice, "Inverter Service"),
             GridItem(R.drawable.plumberservice, "Plumber Service"),
         )
+        
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             modifier = Modifier.padding(padding).background(colorPrimaryLight),
@@ -81,7 +82,7 @@ fun ServiceListing(
         ) {
             items(items) { item ->
                 GridItemContent(item = item) {
-                    navController.navigate(Screen.WelcomeScreen.route)
+                    navController.navigate(Screen.LoginScreen.route)
                 }
             }
         }

@@ -7,7 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.techookku.view.LoginScreen
 import com.example.techookku.view.ServiceListing
-import com.example.techookku.view.WelcomeScreen
+import com.example.techookku.view.SplashScreen
 
 @Composable
 @Preview
@@ -15,10 +15,10 @@ fun Navigation() {
     val navController = rememberNavController()
     NavHost(
         navController = navController,
-        startDestination = Screen.WelcomeScreen.route
+        startDestination = Screen.SplashScreen.route
     ) {
-        composable(Screen.WelcomeScreen.route) {
-            WelcomeScreen(navController = navController)
+        composable(Screen.SplashScreen.route) {
+            SplashScreen(navController = navController)
         }
         composable(Screen.LoginScreen.route) {
             LoginScreen(navController = navController)

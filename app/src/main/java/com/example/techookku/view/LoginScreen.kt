@@ -76,7 +76,7 @@ fun LoginScreen(navController: NavController) {
 
             Surface(
                 color = ghost_white,
-                shape = RoundedCornerShape(40.dp).copy(
+                shape = RoundedCornerShape(20.dp).copy(
                     bottomStart = ZeroCornerSize,
                     bottomEnd = ZeroCornerSize
                 ),

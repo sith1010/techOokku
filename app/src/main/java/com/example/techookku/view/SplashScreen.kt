@@ -32,7 +32,7 @@ import com.example.techookku.ui.theme.colorPrimaryLight
 import kotlinx.coroutines.delay
 
 @Composable
-fun WelcomeScreen(navController: NavController) = Box(
+fun SplashScreen(navController: NavController) = Box(
     Modifier
         .fillMaxWidth()
         .fillMaxHeight()
@@ -51,7 +51,7 @@ fun WelcomeScreen(navController: NavController) = Box(
         )
         delay(3000)
         navController.navigate(Screen.LoginScreen.route) {
-            popUpTo(Screen.WelcomeScreen.route) {
+            popUpTo(Screen.SplashScreen.route) {
                 inclusive = true
             }
         }
@@ -76,5 +76,5 @@ fun WelcomeScreen(navController: NavController) = Box(
 @Preview(showBackground = true)
 @Composable
 fun SplashScreenPreview() {
-    WelcomeScreen(navController = rememberNavController())
+    SplashScreen(navController = rememberNavController())
 }
