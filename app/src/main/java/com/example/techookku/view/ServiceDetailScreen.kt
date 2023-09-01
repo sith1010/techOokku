@@ -1,6 +1,7 @@
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -8,12 +9,22 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -28,12 +39,13 @@ import com.example.techookku.R
 import com.example.techookku.datamodel.ServiceDetailModel
 import com.example.techookku.ui.theme.colorPrimaryLight
 import com.example.techookku.view.TopBar
+import com.example.techookku.view.getSubServiceListAsMap
 
 @Composable
-fun ServiceDetailScreen(navController: NavController,
-                        serviceItem: ServiceDetailModel) {
-
-    val context = LocalContext.current
+fun ServiceDetailScreen(
+    navController: NavController,
+    serviceItem: ServiceDetailModel
+) {
     Scaffold(
         modifier = Modifier.background(colorPrimaryLight),
         topBar = {
@@ -72,44 +84,97 @@ fun ServiceDetailScreen(navController: NavController,
 
             Spacer(modifier = Modifier.height(8.dp))
             Row(modifier = Modifier.padding(start = 16.dp)) {
-
-                Text(
-                    text = serviceItem.price,
-                    fontSize = 16.sp,
-                    color = MaterialTheme.colorScheme.primary
-                )
-            }
-
-
-            Spacer(modifier = Modifier.height(8.dp))
-            Row(modifier = Modifier.padding(start = 16.dp)) {
                 Text(
                     text = serviceItem.description,
                     fontSize = 14.sp
                 )
             }
 
-
-            Spacer(modifier = Modifier.height(16.dp))
-            Row(modifier = Modifier.padding(start = 16.dp, end = 16.dp)) {
-                Button(
-                    colors = ButtonDefaults.buttonColors(colorPrimaryLight),
-                    onClick = {
-                        Toast.makeText(context, "Service added to cart.", Toast.LENGTH_LONG).show() },
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(text = "Add to Cart")
-                }
-            }
-
+            CollapsibleList(serviceItem)
         }
     }
 
 }
 
+@Composable
+fun CollapsibleList(serviceItem: ServiceDetailModel) {
+
+    val gridItems: List<ServiceDetailModel> = getSubServiceListAsMap(serviceItem.serviceId).values.toList()
+    var items by remember { mutableStateOf(gridItems) }
+    var isExpanded = rememberSaveable { mutableStateOf("ro_service") }
+    val context = LocalContext.current
+    LazyColumn {
+        items.forEachIndexed { index, item ->
+            item {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                if (isExpanded.value == item.serviceId) {
+                                    isExpanded.value = ""
+                                } else {
+                                    isExpanded.value = item.serviceId
+                                }
+                            }
+                    ) {
+                        Text(text = item.name, fontWeight = FontWeight.Bold)
+                        Spacer(modifier = Modifier.weight(1f))
+                        Icon(
+                            imageVector = if (isExpanded.value == item.serviceId) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
+                            contentDescription = "Toggle",
+                        )
+                    }
+
+                    if (isExpanded.value == item.serviceId) {
+                        Text(text = item.description, modifier = Modifier.padding(top = 8.dp))
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Row(modifier = Modifier.padding(start = 16.dp)) {
+
+                            Text(
+                                text = serviceItem.price,
+                                fontSize = 16.sp,
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Row(modifier = Modifier.padding(start = 16.dp, end = 16.dp)) {
+                            Button(
+                                colors = ButtonDefaults.buttonColors(colorPrimaryLight),
+                                onClick = {
+                                    Toast.makeText(
+                                        context,
+                                        "Service added to cart.",
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                },
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Text(text = "Add to Cart")
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
 
 @Composable
 @Preview
 fun ServiceDetailPreview() {
-    ServiceDetailScreen(navController = rememberNavController(), ServiceDetailModel("petambulance_service","Pet Ambulance Service", "Rs. 500", "We, along with our partners, provide the ambulance free service for pets.", R.drawable.petambulanceservice))
+    ServiceDetailScreen(
+        navController = rememberNavController(),
+        ServiceDetailModel(
+            "petambulance_service",
+            "Pet Ambulance Service",
+            "Rs. 500",
+            "We, along with our partners, provide the ambulance free service for pets.",
+            R.drawable.petambulanceservice
+        )
+    )
 }

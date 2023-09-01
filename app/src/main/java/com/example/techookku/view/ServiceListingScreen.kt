@@ -188,6 +188,18 @@ fun getServiceListAsMap() : Map<String, ServiceDetailModel> {
 }
 
 @Composable
+fun getSubServiceListAsMap(serviceId: String) : Map<String, ServiceDetailModel> {
+    val serviceMap = mutableMapOf<String, ServiceDetailModel>();
+    serviceMap["ro_service"] = ServiceDetailModel("ro_service", "Sub service 1", "Rs. 500", "Description here", R.drawable.roservice)
+    serviceMap["petambulance_service"] = ServiceDetailModel("petambulance_service", "Sub service 3", "Rs. 500", "Description here", R.drawable.petambulanceservice)
+    serviceMap["it_service"] = ServiceDetailModel("it_service", "Sub service 3", "Rs. 500", "Description here", R.drawable.itservice)
+    serviceMap["ac_service"] = ServiceDetailModel("ac_service", "Sub service 4", "Rs. 500", "Description here", R.drawable.acservice)
+    serviceMap["inservice"] = ServiceDetailModel("inservice", "Sub service 5", "Rs. 500", "Description here", R.drawable.inverterservice)
+    serviceMap["plumberservice"] = ServiceDetailModel("plumberservice", "Sub service 6", "Rs. 500", "Description here", R.drawable.plumberservice)
+    return serviceMap;
+}
+
+@Composable
 @Preview(showBackground = true)
 fun ServicePreview() {
     ServiceListingScreen(navController = rememberNavController())

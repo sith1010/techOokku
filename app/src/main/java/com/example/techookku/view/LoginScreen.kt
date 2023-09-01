@@ -1,5 +1,6 @@
-package com.example.techookku.view;
+package com.example.techookku.view
 
+import android.util.Patterns
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -23,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.Font
@@ -45,12 +47,12 @@ import com.example.techookku.ui.theme.*
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(navController: NavController) {
+
     val firaSansFamily = FontFamily(
         Font(R.font.dmsansregular, FontWeight.Normal),
         Font(R.font.dmsansmedium, FontWeight.Medium),
         Font(R.font.dmsansbold, FontWeight.Bold),
     )
-    val headerText = "PeoplePro"
 
     Box(
         modifier = Modifier
@@ -71,7 +73,7 @@ fun LoginScreen(navController: NavController) {
                         start.linkTo(parent.start)
                         end.linkTo(parent.end)
                     }) {
-                Header(headerText)
+                Header(stringResource(id = R.string.service_listing_title).toString())
             }
 
             Surface(
@@ -143,6 +145,7 @@ fun LoginScreen(navController: NavController) {
                             bottom = 20.dp
                         )
                     )
+                    var isEmailValid by remember { mutableStateOf(true) }
 
                     var useremail by remember { mutableStateOf("") }
 
@@ -173,11 +176,13 @@ fun LoginScreen(navController: NavController) {
                                 }
                             )
                         },
-                        colors = TextFieldDefaults.textFieldColors(
-                            containerColor = white,
+                        colors = TextFieldDefaults.colors(
+                            focusedContainerColor = white,
+                            unfocusedContainerColor = white,
+                            disabledContainerColor = white,
                             focusedIndicatorColor = Color.Transparent,
                             unfocusedIndicatorColor = Color.Transparent,
-                            disabledIndicatorColor = Color.Transparent
+                            disabledIndicatorColor = Color.Transparent,
                         ),
                         modifier = Modifier
                             .fillMaxWidth(),
@@ -186,8 +191,16 @@ fun LoginScreen(navController: NavController) {
                         shape = RoundedCornerShape(8.dp),
                         onValueChange = {
                             useremail = it
+                            isEmailValid = isValidEmail(it)
                         }
                     )
+                    if (!isEmailValid) {
+                        Text(
+                            text = "Invalid email address",
+                            color = Color.Red,
+                            modifier = Modifier.padding(start = 16.dp),
+                        )
+                    }
 
                     Text(
                         text = "Password",
@@ -200,7 +213,7 @@ fun LoginScreen(navController: NavController) {
                     )
 
                     var password by remember { mutableStateOf("") }
-
+                    var isPasswordValid by remember { mutableStateOf(true) }
                     TextField(
                         value = password,
                         leadingIcon = {
@@ -228,11 +241,13 @@ fun LoginScreen(navController: NavController) {
                                 }
                             )
                         },
-                        colors = TextFieldDefaults.textFieldColors(
-                            containerColor = white,
+                        colors = TextFieldDefaults.colors(
+                            focusedContainerColor = white,
+                            unfocusedContainerColor = white,
+                            disabledContainerColor = white,
                             focusedIndicatorColor = Color.Transparent,
                             unfocusedIndicatorColor = Color.Transparent,
-                            disabledIndicatorColor = Color.Transparent
+                            disabledIndicatorColor = Color.Transparent,
                         ),
                         modifier = Modifier
                             .fillMaxWidth(),
@@ -242,8 +257,16 @@ fun LoginScreen(navController: NavController) {
                         shape = RoundedCornerShape(8.dp),
                         onValueChange = {
                             password = it
+                            isPasswordValid = isValidPassword(it)
                         }
                     )
+                    if (!isPasswordValid) {
+                        Text(
+                            text = "Invalid password.",
+                            color = Color.Red,
+                            modifier = Modifier.padding(start = 16.dp),
+                        )
+                    }
 
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -263,8 +286,12 @@ fun LoginScreen(navController: NavController) {
 
                     Button(
                         onClick = {
-                            navController.popBackStack()
-                            navController.navigate(Screen.ServiceListingScreen.route)
+                            isEmailValid = isValidEmail(useremail)
+                            isPasswordValid = isValidPassword(password)
+                            if (isEmailValid && isPasswordValid) {
+                                navController.popBackStack()
+                                navController.navigate(Screen.ServiceListingScreen.route)
+                            }
                         },
                         colors = ButtonDefaults.buttonColors(containerColor = colorPrimaryLight),
                         modifier = Modifier
@@ -305,7 +332,6 @@ fun LoginScreen(navController: NavController) {
                             }
                         )
                     }
-
                 }
 
             }
@@ -322,9 +348,11 @@ fun Header(text: String) {
         horizontalAlignment = Alignment.CenterHorizontally
 
     ) {
-        Row (modifier = Modifier.fillMaxWidth(),
+        Row(
+            modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Start) {
+            horizontalArrangement = Arrangement.Start
+        ) {
             Text(
                 text = text,
                 color = white,
@@ -338,6 +366,14 @@ fun Header(text: String) {
 
 
     }
+}
+
+fun isValidEmail(email: String): Boolean {
+    return email.isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches()
+}
+
+fun isValidPassword(pass: String): Boolean {
+    return pass.isNotEmpty() && pass.length > 5;
 }
 
 @Preview(showBackground = true)
